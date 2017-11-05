@@ -1,6 +1,7 @@
 from datetime import datetime
 import os
 import tarfile
+import time
 
 from envparse import env
 from pushover import Client
@@ -13,6 +14,7 @@ env.read_envfile()
 
 TARGET_DIR = env('TARGET_DIR')  # note that here TARGET_DIR is used as the SOURCE for the tarball
 ARCHIVE_DIR = env('ARCHIVE_DIR')
+DAYS_TO_RETAIN_ARCHIVES = env('DAYS_TO_RETAIN_ARCHIVES')
 PUSHOVER_API_TOKEN = env('PUSHOVER_API_TOKEN')
 PUSHOVER_USER_KEY = env('PUSHOVER_USER_KEY')
 APP_NAME = env('APP_NAME')
@@ -61,6 +63,28 @@ def run():
         print(msg)
         send_notification(
             '{} - ARCHIVE FAILED'.format(APP_NAME),
+            msg
+        )
+
+    print('Removing old archives ...')
+
+    try:
+        n = time.time()
+        d = int(DAYS_TO_RETAIN_ARCHIVES)
+
+        for f in os.listdir(ARCHIVE_DIR):
+            f = os.path.join(ARCHIVE_DIR, f)
+            if os.stat(f).st_mtime < n - d * 86400:
+                if os.path.isfile(f):
+                    os.remove(f)
+
+        print('Old archives removed.')
+    except Exception as e:
+        # only alert if the archives couldn't be removed so we don't run out of disk space
+        msg = 'Removing old archives failed! {}'.format(str(e))
+        print(msg)
+        send_notification(
+            '{} - REMOVING ARCHIVES FAILED'.format(APP_NAME),
             msg
         )
 
