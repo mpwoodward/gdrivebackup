@@ -1,0 +1,7 @@
+SOURCE_DIR=the google drive directory
+TARGET_DIR=the directory where you want to backup the google drive files
+ARCHIVE_DIR=the directory where you want to keep the zip archives
+HOURS_TO_RETAIN_ARCHIVES=the number of hours after which archives will be deleted
+PUSHOVER_API_TOKEN=your pushover application api token
+PUSHOVER_USER_KEY=your pushover user key
+APP_NAME=the application name you want to use in your pushover notification titles
