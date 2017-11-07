@@ -50,7 +50,7 @@ def run():
 
         for f in os.listdir(ARCHIVE_DIR):
             f = os.path.join(ARCHIVE_DIR, f)
-            if os.stat(f).st_mtime < n - d * 86400:
+            if os.stat(f).st_mtime <= n - d * 86400:
                 if os.path.isfile(f):
                     os.remove(f)
 
