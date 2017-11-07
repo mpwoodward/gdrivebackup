@@ -41,6 +41,30 @@ def run():
         print("ARCHIVE_DIR {} doesn't exist. Creating ...")
         os.mkdir(ARCHIVE_DIR)
 
+    # remove the old archives first since we may be tight on disk space
+    print('Removing old archives ...')
+
+    try:
+        n = time.time()
+        d = int(DAYS_TO_RETAIN_ARCHIVES)
+
+        for f in os.listdir(ARCHIVE_DIR):
+            f = os.path.join(ARCHIVE_DIR, f)
+            if os.stat(f).st_mtime < n - d * 86400:
+                if os.path.isfile(f):
+                    os.remove(f)
+
+        print('Old archives removed.')
+    except Exception as e:
+        # only alert if the archives couldn't be removed so we don't run out of disk space
+        msg = 'Removing old archives failed! {}'.format(str(e))
+        print(msg)
+        send_notification(
+            '{} - REMOVING ARCHIVES FAILED'.format(APP_NAME),
+            msg
+        )
+
+    # create the new archive
     print('Creating archive ...')
 
     try:
@@ -63,28 +87,6 @@ def run():
         print(msg)
         send_notification(
             '{} - ARCHIVE FAILED'.format(APP_NAME),
-            msg
-        )
-
-    print('Removing old archives ...')
-
-    try:
-        n = time.time()
-        d = int(DAYS_TO_RETAIN_ARCHIVES)
-
-        for f in os.listdir(ARCHIVE_DIR):
-            f = os.path.join(ARCHIVE_DIR, f)
-            if os.stat(f).st_mtime < n - d * 86400:
-                if os.path.isfile(f):
-                    os.remove(f)
-
-        print('Old archives removed.')
-    except Exception as e:
-        # only alert if the archives couldn't be removed so we don't run out of disk space
-        msg = 'Removing old archives failed! {}'.format(str(e))
-        print(msg)
-        send_notification(
-            '{} - REMOVING ARCHIVES FAILED'.format(APP_NAME),
             msg
         )
 
