@@ -38,7 +38,7 @@ def run():
 
     # make sure the archive dir exists, create if it doesn't
     if not os.path.exists(ARCHIVE_DIR):
-        print("ARCHIVE_DIR {} doesn't exist. Creating ...")
+        print("ARCHIVE_DIR {} doesn't exist. Creating ...".format(ARCHIVE_DIR))
         os.mkdir(ARCHIVE_DIR)
 
     # remove the old archives first since we may be tight on disk space
