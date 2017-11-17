@@ -3,7 +3,6 @@ import os
 from dirsync import sync
 from envparse import env
 from pushover import Client
-from pydrive.auth import GoogleAuth
 
 """
     * Syncs the SOURCE_DIR to the TARGET_DIR
