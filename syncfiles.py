@@ -4,10 +4,8 @@ from dirsync import sync
 from envparse import env
 from pushover import Client
 from pydrive.auth import GoogleAuth
-from pydrive.drive import GoogleDrive
 
 """
-    * Syncs with Google Drive
     * Syncs the SOURCE_DIR to the TARGET_DIR
     * Sends notifications as needed via Pushover
 """
@@ -27,12 +25,6 @@ def send_notification(title, msg):
 
 
 def run():
-    # sync files from google drive
-    gauth = GoogleAuth()
-    gauth.LocalWebserverAuth()
-
-    drive = GoogleDrive(gauth)
-
     # make sure the source dir exists, exit if it doesn't
     if not os.path.exists(SOURCE_DIR):
         msg = "SOURCE_DIR {} doesn't exist!".format(SOURCE_DIR)
